@@ -1,4 +1,4 @@
-name: codenerf
+name: code-nerf-imle
 channels:
   - pytorch
   - defaults

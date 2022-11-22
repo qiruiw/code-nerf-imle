@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 
+
 def PE(x, degree):
     y = torch.cat([2.**i * x for i in range(degree)], -1)
     w = 1

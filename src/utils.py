@@ -1,4 +1,3 @@
-
 import imageio
 import numpy as np
 import torch
@@ -18,20 +17,22 @@ def get_rays(H, W, focal, c2w):
     rays_o, viewdirs = rays_o.reshape(-1, 3), viewdirs.reshape(-1, 3)
     return rays_o, viewdirs
 
-def sample_from_rays(ro, vd, near, far, N_samples, z_fixed = False):
+
+def sample_from_rays(ro, vd, near, far, N_samples, z_fixed=False):
     # Given ray centre (camera location), we sample z_vals
     # we do not use ray_o here - just number of rays
     if z_fixed:
         z_vals = torch.linspace(near, far, N_samples).type_as(ro)
     else:
-        dist = (far - near) / (2*N_samples)
-        z_vals = torch.linspace(near+dist, far-dist, N_samples).type_as(ro)
-        z_vals += torch.rand(N_samples) * (far - near) / (2*N_samples)
+        dist = (far - near) / (2 * N_samples)
+        z_vals = torch.linspace(near + dist, far - dist, N_samples).type_as(ro)
+        z_vals += torch.rand(N_samples) * (far - near) / (2 * N_samples)
     xyz = ro.unsqueeze(-2) + vd.unsqueeze(-2) * z_vals.unsqueeze(-1)
-    vd = vd.unsqueeze(-2).repeat(1,N_samples,1)
+    vd = vd.unsqueeze(-2).repeat(1, N_samples, 1)
     return xyz, vd, z_vals
 
-def volume_rendering(sigmas, rgbs, z_vals, white_bg = True):
+
+def volume_rendering(sigmas, rgbs, z_vals, white_bg=True):
     deltas = z_vals[1:] - z_vals[:-1]
     deltas = torch.cat([deltas, torch.ones_like(deltas[:1]) * 1e10])
     alphas = 1 - torch.exp(-sigmas.squeeze(-1) * deltas)
@@ -46,11 +47,12 @@ def volume_rendering(sigmas, rgbs, z_vals, white_bg = True):
         rgb_final = rgb_final + 1 - weights_sum.unsqueeze(-1)
     return rgb_final, depth_final
 
+
 def image_float_to_uint8(img):
     """
     Convert a float image (0.0-1.0) to uint8 (0-255)
     """
-    #print(img.shape)
+    # print(img.shape)
     vmin = np.min(img)
     vmax = np.max(img)
     if vmax - vmin < 1e-10:

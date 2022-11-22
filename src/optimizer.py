@@ -48,10 +48,8 @@ class Optimizer():
 
     def optimize_objs(self, instance_ids, lr=1e-2, lr_half_interval=50, save_img = True):
         logpath = os.path.join(self.save_dir, 'opt_hpams.json')
-        hpam = {'instance_ids' : instance_ids, 'lr': lr, 'lr_half_interval': lr_half_interval,
-                '
-                
-                ': self.splits}
+        hpam = {'instance_ids': instance_ids, 'lr': lr, 'lr_half_interval': lr_half_interval,
+                ' ': self.splits}
         with open(logpath, 'w') as f:
             json.dump(hpam, f, indent=2)
 
@@ -101,7 +99,7 @@ class Optimizer():
                 self.log_opt_psnr_time(np.mean(loss_per_img), time.time() - t1, self.nopts + self.num_opts * num_obj,
                                        num_obj)
                 self.log_regloss(reg_loss.item(), self.nopts, num_obj)
-                if self.save_img:
+                if save_img:
                     self.save_img(generated_imgs, gt_imgs, self.ids[num_obj], self.nopts)
                 self.nopts += 1
                 if self.nopts % lr_half_interval == 0:
@@ -129,13 +127,13 @@ class Optimizer():
                         self.log_compute_ssim(torch.cat(generated_img).reshape(H, W, 3), tgt_img.reshape(H, W, 3),
                                               num, num_obj)
                         if save_img:
-                            self.save_img([torch.cat(generated_img).reshape(H,W,3)], [tgt_img.reshape(H,W,3)], self.ids[num_obj], num,
-                                          opt=False)
+                            self.save_img([torch.cat(generated_img).reshape(H,W,3)], [tgt_img.reshape(H,W,3)],
+                                          self.ids[num_obj], num, opt=False)
 
-            # Save the optimized codes
-            self.optimized_shapecodes[num_obj] = shapecode.detach().cpu()
-            self.optimized_texturecodes[num_obj] = texturecode.detach().cpu()
-            self.save_opts(num_obj)
+        # Save the optimized codes
+        self.optimized_shapecodes[num_obj] = shapecode.detach().cpu()
+        self.optimized_texturecodes[num_obj] = texturecode.detach().cpu()
+        self.save_opts(num_obj)
 
     def save_opts(self, num_obj):
         saved_dict = {
