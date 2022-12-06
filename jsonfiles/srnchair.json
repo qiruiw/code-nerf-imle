@@ -18,8 +18,8 @@
   "far": 2.75,
   "loss_reg_coef": 1e-4,
   "lr_schedule": [
-    {"type":  "step", "lr":  1e-4, "interval":  60000},
-    {"type":  "step", "lr":  1e-3, "interval":  60000}
+    {"type":  "step", "lr":  1e-4, "interval":  50000},
+    {"type":  "step", "lr":  1e-3, "interval":  50000}
   ],
   "check_points": 50000
 }
