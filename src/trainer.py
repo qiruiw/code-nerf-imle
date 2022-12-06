@@ -154,6 +154,7 @@ class Trainer():
                     self.log_img(generated_img, gtimg, obj_idx)
                     print(-10*np.log(np.mean(loss_per_img))/np.log(10), self.niter)
                 if self.niter % (5*self.check_iter) == 0:
+                    gtimg = imgs[0,-1].reshape(H,W,3)
                     generative_img = torch.from_numpy(img_est_np)
                     self.log_g_img(generative_img, gtimg, obj_idx)
                 if self.niter % self.hpams['check_points'] == 0:
@@ -179,9 +180,9 @@ class Trainer():
     def log_g_img(self, generative_img, gtimg, obj_idx, m=10):
         H, W = gtimg.shape[:-1]
         ret = torch.zeros(H,(m+1)*W, 3)
-        for i in range(m):
+        ret[:,:W,:] = gtimg
+        for i in range(1,m+1):
             ret[:,i*W:(i+1)*W,:] = generative_img[i].reshape(H,W,3)
-        ret[:,m*W:,:] = gtimg
         ret = image_float_to_uint8(ret.detach().cpu().numpy())
         self.writer.add_image('generative_'+str(self.niter) + '_' + str(obj_idx.item()), torch.from_numpy(ret).permute(2,0,1))
 
