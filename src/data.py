@@ -50,7 +50,7 @@ class SRN():
         self.ids = np.sort([f.name for f in os.scandir(self.data_dir)])[:500]
         self.lenids = len(self.ids)
         self.num_instances_per_obj = num_instances_per_obj
-        self.train = True if splits.split('_')[1] == 'train' else False
+        self.train = True if splits.split('_')[-1] == 'train' else False
         self.crop_img = crop_img
 
     def __len__(self):
