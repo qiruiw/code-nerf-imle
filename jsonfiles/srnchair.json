@@ -10,7 +10,7 @@
   "data": {
     "cat" : "srn_chairs",
     "splits": "chairs_train/chairs_2.0_train",
-    "data_dir": "../data/ShapeNet_SRN"
+    "data_dir": "../data/shapenet-srn"
   },
   "N_samples": 96,
   "near": 1.25,

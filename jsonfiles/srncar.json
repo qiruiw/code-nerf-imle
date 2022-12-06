@@ -11,7 +11,7 @@
   "data": {
     "cat" : "srn_cars",
     "splits": "cars_train",
-    "data_dir": "/local-scratch/qiruiw/dataset/shapenet-srn"
+    "data_dir": "../data/shapenet-srn"
   },
   "N_samples": 96,
   "near": 0.8,
