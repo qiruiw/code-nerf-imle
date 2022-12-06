@@ -2,23 +2,24 @@
   "net_hyperparams": {
     "shape_blocks": 3,
     "texture_blocks": 1,
-    "W": 256,
+    "W": 128,
     "num_xyz_freq": 10,
     "num_dir_freq": 4,
-    "latent_dim": 256
+    "latent_dim": 256,
+    "code_dim": 128
   },
   "data": {
     "cat" : "srn_chairs",
     "splits": "chairs_train/chairs_2.0_train",
-    "data_dir": "../data/shapenet-srn"
+    "data_dir": "./data/shapenet-srn"
   },
   "N_samples": 96,
   "near": 1.25,
   "far": 2.75,
   "loss_reg_coef": 1e-4,
   "lr_schedule": [
-    {"type":  "step", "lr":  1e-4, "interval":  500000},
-    {"type":  "step", "lr":  1e-3, "interval":  500000}
+    {"type":  "step", "lr":  1e-4, "interval":  60000},
+    {"type":  "step", "lr":  1e-3, "interval":  60000}
   ],
-  "check_points": 100000
+  "check_points": 50000
 }

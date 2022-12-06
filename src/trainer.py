@@ -71,7 +71,7 @@ class Trainer():
                 
                 z_shape_np = np.zeros((10*num_instances_per_obj, 128))
                 z_txt_np = np.zeros((10*num_instances_per_obj, 128))
-                img_est_np = np.zeros((10*num_instances_per_obj, 64*64*3))
+                img_est_np = np.zeros((10*num_instances_per_obj, (H*W*3).item()))
                 with torch.no_grad():
                     for i in range(10*num_instances_per_obj):
                         k = i // 10
@@ -89,7 +89,8 @@ class Trainer():
                         z_txt_np[i] = z_txt.cpu().numpy()
                         img_est_np[i] = rgb_rays.view(-1).cpu().numpy()
                 
-                nbrs = faiss.IndexFlatL2(64*64*3)
+                # import pdb; pdb.set_trace()
+                nbrs = faiss.IndexFlatL2((H*W*3).item())
                 nbrs.add(img_est_np.astype('float32'))
                 _, indices = nbrs.search(imgs[0].view(num_instances_per_obj, -1).cpu().numpy().astype('float32'), 1)
                 indices = indices.squeeze(1)

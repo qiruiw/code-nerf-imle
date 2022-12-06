@@ -11,15 +11,15 @@
   "data": {
     "cat" : "srn_cars",
     "splits": "cars_train",
-    "data_dir": "../data/shapenet-srn"
+    "data_dir": "./data/shapenet-srn"
   },
   "N_samples": 96,
   "near": 0.8,
   "far": 1.8,
   "loss_reg_coef": 1e-4,
   "lr_schedule": [
-    {"type":  "step", "lr":  1e-4, "interval":  50000},
-    {"type":  "step", "lr":  1e-3, "interval":  50000}
+    {"type":  "step", "lr":  1e-4, "interval":  60000},
+    {"type":  "step", "lr":  1e-3, "interval":  60000}
   ],
   "check_points": 50000
 }
