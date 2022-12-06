@@ -14,7 +14,5 @@ dependencies:
   - scipy
   - numpy
   - matplotlib
-  - pytorch
-  - torchvision
   - scikit-image
   - tqdm
