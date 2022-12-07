@@ -6,7 +6,8 @@
     "num_xyz_freq": 10,
     "num_dir_freq": 4,
     "latent_dim": 256,
-    "code_dim": 128
+    "code_dim": 128,
+    "noise_mode": "cat"
   },
   "data": {
     "cat" : "srn_chairs",

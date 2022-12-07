@@ -52,6 +52,7 @@ class Trainer():
         # only 1 or a few images are chosen for each epoch
         self.make_dataloader(num_instances_per_obj, crop_img = crop_img)
         self.set_optimizers()
+        embdim = self.hpams['net_hyperparams']['code_dim']
         # per object
         for d in tqdm(self.dataloader): # batch size 1
             if self.niter < num_iters:
@@ -69,14 +70,14 @@ class Trainer():
                                             self.hpams['N_samples'])
                         ray_samples.append((xyz, viewdir, z_vals))
                 
-                z_shape_np = np.zeros((10*num_instances_per_obj, 128))
-                z_txt_np = np.zeros((10*num_instances_per_obj, 128))
+                z_shape_np = np.zeros((10*num_instances_per_obj, embdim))
+                z_txt_np = np.zeros((10*num_instances_per_obj, embdim))
                 img_est_np = np.zeros((10*num_instances_per_obj, (H*W*3).item()))
                 with torch.no_grad():
                     for i in range(10*num_instances_per_obj):
                         k = i // 10
-                        z_shape = torch.randn(1, 128).cuda()
-                        z_txt = torch.randn(1, 128).cuda()
+                        z_shape = torch.randn(1, embdim).cuda()
+                        z_txt = torch.randn(1, embdim).cuda()
                         xyz, viewdir, z_vals = ray_samples[k]
                         sigmas, rgbs = self.model(xyz.to(self.device),
                                                   viewdir.to(self.device),

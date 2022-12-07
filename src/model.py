@@ -9,12 +9,13 @@ def PE(x, degree):
 
 class CodeNeRF(nn.Module):
     def __init__(self, shape_blocks = 2, texture_blocks = 1, W = 256, 
-                 num_xyz_freq = 10, num_dir_freq = 4, latent_dim=256, code_dim=128):
+                 num_xyz_freq = 10, num_dir_freq = 4, latent_dim=256, code_dim=128, noise_mode="cat"):
         super().__init__()
         self.shape_blocks = shape_blocks
         self.texture_blocks = texture_blocks
         self.num_xyz_freq = num_xyz_freq
         self.num_dir_freq = num_dir_freq
+        self.noise_mode = noise_mode
         
         d_xyz, d_viewdir = 3 + 6 * num_xyz_freq, 3 + 6 * num_dir_freq
         self.encoding_xyz = nn.Sequential(nn.Linear(d_xyz, W), nn.ReLU())
@@ -36,8 +37,12 @@ class CodeNeRF(nn.Module):
         self.rgb = nn.Sequential(nn.Linear(W, W//2), nn.ReLU(), nn.Linear(W//2, 3))
         
     def forward(self, xyz, viewdir, shape_latent, texture_latent, shape_noise, texture_noise):
-        shape_latent = torch.cat([shape_latent, shape_noise], dim=1)
-        texture_latent = torch.cat([texture_latent, texture_noise], dim=1)
+        if self.noise_mode == "cat":
+            shape_latent = torch.cat([shape_latent, shape_noise], dim=1)
+            texture_latent = torch.cat([texture_latent, texture_noise], dim=1)
+        else:
+            shape_latent = shape_latent + shape_noise
+            texture_latent = texture_latent + texture_noise
         xyz = PE(xyz, self.num_xyz_freq)
         viewdir = PE(viewdir, self.num_dir_freq)
         y = self.encoding_xyz(xyz)
