@@ -239,7 +239,6 @@ class Trainer():
         with open(hpampath, 'w') as f:
             json.dump(self.hpams, f, indent=2)
 
-
     def save_models(self, iter = None):
         save_dict = {'model_params': self.model.state_dict(),
                      'shape_code_params': self.shape_codes.state_dict(),
@@ -250,5 +249,3 @@ class Trainer():
         if iter != None:
             torch.save(save_dict, os.path.join(self.save_dir, str(iter) + '.pth'))
         torch.save(save_dict, os.path.join(self.save_dir, 'models.pth'))
-
-

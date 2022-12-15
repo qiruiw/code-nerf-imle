@@ -48,10 +48,7 @@ class Optimizer():
 
     def optimize_objs(self, instance_ids, lr=1e-2, lr_half_interval=50, save_img = True):
         logpath = os.path.join(self.save_dir, 'opt_hpams.json')
-        hpam = {'instance_ids' : instance_ids, 'lr': lr, 'lr_half_interval': lr_half_interval,
-                '
-                
-                ': self.splits}
+        hpam = {'instance_ids' : instance_ids, 'lr': lr, 'lr_half_interval': lr_half_interval}
         with open(logpath, 'w') as f:
             json.dump(hpam, f, indent=2)
 
@@ -125,6 +122,7 @@ class Optimizer():
                             loss_l2 = torch.mean((rgb_rays - tgt_img[i:i+self.B].type_as(rgb_rays)) ** 2)
                             loss_per_img.append(loss_l2.item())
                             generated_img.append(rgb_rays)
+                        
                         self.log_eval_psnr(np.mean(loss_per_img), num, num_obj)
                         self.log_compute_ssim(torch.cat(generated_img).reshape(H, W, 3), tgt_img.reshape(H, W, 3),
                                               num, num_obj)
